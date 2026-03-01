@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Holi 🌈</title>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: #0a0010; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    background: radial-gradient(ellipse at 50% 100%, #1a0030 0%, #0a0010 70%);
+  }
+  .blob {
+    position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.2;
+    animation: float 8s ease-in-out infinite; pointer-events: none;
+  }
+  .hero-title {
+    font-family: 'Abril Fatface', serif;
+    font-size: clamp(3.5rem, 14vw, 10rem); line-height: 0.95; text-align: center;
+    background: linear-gradient(135deg, #ff3cac, #ffe000, #00e5a0, #00c3ff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    animation: shimmer 3s ease-in-out infinite alternate; z-index: 2;
+  }
+  .hero-sub {
+    color: rgba(255,255,255,0.45); font-size: clamp(0.8rem, 2vw, 1.1rem);
+    letter-spacing: 0.45em; text-transform: uppercase; margin-top: 0.6rem; z-index: 2;
+  }
+  .scroll-hint {
+    position: absolute; bottom: 2rem; color: rgba(255,255,255,0.35);
+    font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase;
+    animation: bounce 2s infinite; z-index: 2;
+  }
+
+  .photo-section { min-height: 460vh; position: relative; }
+  .sticky-wrap {
+    position: sticky; top: 0; height: 100vh;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .photo-container { position: relative; width: min(370px, 82vw); }
+
+  #holiCanvas {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    border-radius: 1.8rem; pointer-events: none;
+  }
+  #portrait {
+    display: block; width: 100%; height: auto; border-radius: 1.8rem;
+    box-shadow: 0 0 60px rgba(255,60,172,0.25), 0 0 0 2px rgba(255,255,255,0.04);
+  }
+  .color-label {
+    position: absolute; bottom: -3.2rem; left: 50%; transform: translateX(-50%);
+    font-family: 'Abril Fatface', serif; font-size: 1.3rem; letter-spacing: 0.08em;
+    opacity: 0; transition: opacity 0.4s; white-space: nowrap; pointer-events: none;
+  }
+
+  .footer {
+    min-height: 55vh; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center;
+    background: radial-gradient(ellipse at 50% 0%, #1a0030 0%, #0a0010 60%);
+    padding: 4rem 2rem; position: relative; overflow: hidden;
+  }
+  .footer h2 {
+    font-family: 'Abril Fatface', serif; font-size: clamp(2rem, 9vw, 5.5rem);
+    background: linear-gradient(135deg, #ffe000, #ff3cac, #00c3ff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 0.8rem;
+  }
+  .footer p { color: rgba(255,255,255,0.4); font-size: 0.95rem; letter-spacing: 0.2em; text-transform: uppercase; }
+
+  #progressBar {
+    position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+    background: linear-gradient(90deg, #ff3cac, #ffe000, #00e5a0, #00c3ff);
+    z-index: 1000; transition: width 0.08s;
+  }
+  .powder-particle {
+    position: fixed; border-radius: 50%; pointer-events: none; z-index: 200;
+    animation: pFly 1.4s ease-out forwards;
+  }
+  .powder-ring {
+    position: fixed; border-radius: 50%; border: 3px solid; pointer-events: none;
+    z-index: 201; animation: ringExpand 0.9s ease-out forwards;
+  }
+
+  @keyframes shimmer { from{filter:hue-rotate(0deg)} to{filter:hue-rotate(40deg)} }
+  @keyframes float { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-40px) scale(1.06)} }
+  @keyframes bounce { 0%,100%{transform:translateY(0);opacity:0.35} 50%{transform:translateY(8px);opacity:0.7} }
+  @keyframes pFly { 0%{opacity:0.9;transform:translate(0,0) scale(1)} 100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0.1)} }
+  @keyframes ringExpand { 0%{transform:scale(0.2);opacity:0.8} 100%{transform:scale(3.5);opacity:0} }
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+
+<section class="hero">
+  <div class="blob" style="width:450px;height:450px;background:#ff3cac;top:-120px;left:-120px;animation-delay:0s;"></div>
+  <div class="blob" style="width:380px;height:380px;background:#00c3ff;bottom:-80px;right:-60px;animation-delay:2.5s;"></div>
+  <div class="blob" style="width:320px;height:320px;background:#ffe000;top:35%;left:55%;animation-delay:5s;"></div>
+  <h1 class="hero-title">Happy<br>Holi</h1>
+  <p class="hero-sub">Festival of colours</p>
+  <div class="scroll-hint">Scroll to colour her face ↓</div>
+</section>
+
+<section class="photo-section" id="photoSection">
+  <div class="sticky-wrap">
+    <div class="photo-container" id="photoContainer">
+      <img src="holi_photo.jpeg" id="portrait" alt="Portrait" />
+      <canvas id="holiCanvas"></canvas>
+      <div class="color-label" id="colorLabel"></div>
+    </div>
+  </div>
+</section>
+
+<section class="footer">
+  <div class="blob" style="width:500px;height:500px;background:#b721ff;top:-200px;left:50%;transform:translateX(-50%);opacity:0.12;filter:blur(100px);"></div>
+  <h2>Rang Barse! 🎊</h2>
+  <p>Wishing you a colourful &amp; joyful Holi</p>
+</section>
+
+<script>
+// Face detected via OpenCV on original 720x1280 image
+// Face rect: x=368 y=206 w=234 h=234
+// As fraction of image: cx=0.674, cy=0.252, rx=0.179, ry=0.119
+// Expanding slightly for natural coverage
+const FACE = { cx: 0.674, cy: 0.248, rx: 0.22, ry: 0.16 };
+
+const COLORS = [
+  { name: '🩷 Gulal Pink',    hex: '#ff2d87', r:255, g:45,  b:135 },
+  { name: '💛 Haldi Yellow',  hex: '#ffd700', r:255, g:215, b:0   },
+  { name: '💚 Pista Green',   hex: '#00e06c', r:0,   g:224, b:108 },
+  { name: '🧡 Kesariya',      hex: '#ff7b00', r:255, g:123, b:0   },
+  { name: '💙 Neela Rang',    hex: '#00b4ff', r:0,   g:180, b:255 },
+  { name: '💜 Gulabi Purple', hex: '#c020f0', r:192, g:32,  b:240 },
+];
+
+const canvas      = document.getElementById('holiCanvas');
+const ctx         = canvas.getContext('2d');
+const portrait    = document.getElementById('portrait');
+const photoSec    = document.getElementById('photoSection');
+const colorLabel  = document.getElementById('colorLabel');
+const progressBar = document.getElementById('progressBar');
+
+function resizeCanvas() {
+  canvas.width  = portrait.offsetWidth;
+  canvas.height = portrait.offsetHeight;
+}
+portrait.addEventListener('load', resizeCanvas);
+window.addEventListener('resize', () => { resizeCanvas(); drawColors(getSectionProgress()); });
+setTimeout(resizeCanvas, 100);
+
+function drawColors(progress) {
+  const W = canvas.width, H = canvas.height;
+  if (!W || !H) return;
+  ctx.clearRect(0, 0, W, H);
+
+  const step = 1 / COLORS.length;
+
+  COLORS.forEach((col, i) => {
+    const start   = i * step;
+    const fadeEnd = start + step * 0.45;
+    let opacity = 0;
+    if (progress >= fadeEnd) {
+      opacity = 1;
+    } else if (progress > start) {
+      opacity = (progress - start) / (fadeEnd - start);
+    }
+    if (opacity <= 0.005) return;
+
+    const cx = W * FACE.cx;
+    const cy = H * FACE.cy;
+    const rx = W * FACE.rx;
+    const ry = H * FACE.ry;
+
+    ctx.save();
+    // Clip to face ellipse
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+    ctx.clip();
+
+    // Radial gradient — strong at center, fade to transparent at edges
+    const grad = ctx.createRadialGradient(cx, cy - ry * 0.08, 0, cx, cy, Math.max(rx, ry) * 1.05);
+    grad.addColorStop(0,    `rgba(${col.r},${col.g},${col.b},${(opacity * 0.85).toFixed(3)})`);
+    grad.addColorStop(0.55, `rgba(${col.r},${col.g},${col.b},${(opacity * 0.6).toFixed(3)})`);
+    grad.addColorStop(0.85, `rgba(${col.r},${col.g},${col.b},${(opacity * 0.25).toFixed(3)})`);
+    grad.addColorStop(1,    `rgba(${col.r},${col.g},${col.b},0)`);
+
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+  });
+}
+
+let lastColorIndex = -1;
+let labelTimer;
+
+function getSectionProgress() {
+  const rect   = photoSec.getBoundingClientRect();
+  const height = photoSec.offsetHeight - window.innerHeight;
+  return Math.max(0, Math.min(1, -rect.top / height));
+}
+
+function onScroll() {
+  const progress = getSectionProgress();
+  const totalScroll = document.body.scrollHeight - window.innerHeight;
+  progressBar.style.width = (window.scrollY / totalScroll * 100) + '%';
+
+  drawColors(progress);
+
+  const step = 1 / COLORS.length;
+  const activeIdx = progress < 0.01 ? -1 : Math.min(COLORS.length - 1, Math.floor(progress / step));
+
+  if (activeIdx !== lastColorIndex) {
+    lastColorIndex = activeIdx;
+    if (activeIdx >= 0) {
+      const col = COLORS[activeIdx];
+      colorLabel.textContent = col.name;
+      colorLabel.style.color = col.hex;
+      colorLabel.style.textShadow = `0 0 20px ${col.hex}`;
+      colorLabel.style.opacity = '1';
+      clearTimeout(labelTimer);
+      labelTimer = setTimeout(() => colorLabel.style.opacity = '0', 1800);
+      spawnBurst(col.hex);
+    } else {
+      colorLabel.style.opacity = '0';
+    }
+  }
+}
+
+window.addEventListener('scroll', onScroll, { passive: true });
+
+function spawnBurst(hex) {
+  const rect = canvas.getBoundingClientRect();
+  const cx = rect.left + rect.width  * FACE.cx;
+  const cy = rect.top  + rect.height * FACE.cy;
+
+  for (let i = 0; i < 22; i++) {
+    const p  = document.createElement('div');
+    p.className = 'powder-particle';
+    const sz  = Math.random() * 13 + 4;
+    const ang = Math.random() * Math.PI * 2;
+    const d   = Math.random() * 120 + 30;
+    p.style.cssText = `width:${sz}px;height:${sz}px;background:${hex};left:${cx-sz/2}px;top:${cy-sz/2}px;--tx:${Math.cos(ang)*d}px;--ty:${Math.sin(ang)*d}px;filter:blur(2px);`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1500);
+  }
+
+  const ring = document.createElement('div');
+  ring.className = 'powder-ring';
+  ring.style.cssText = `width:50px;height:50px;border-color:${hex};left:${cx-25}px;top:${cy-25}px;`;
+  document.body.appendChild(ring);
+  setTimeout(() => ring.remove(), 950);
+}
+</script>
+</body>
+</html>
